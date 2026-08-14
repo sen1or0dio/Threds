@@ -8,8 +8,8 @@ const postInput = document.querySelector('.post-input')
 const postButton = document.querySelector('.post-button')
 const all_posts = document.querySelector('.posts-container')
 const deleteModal = document.querySelector('#delete-modal')
-const confirmDeleteButton = document.querySelector('#delete-confirm')
-const cancelDeleteButton = document.querySelector('#delete-cancel')
+const confirmDeleteButton = document.querySelector('#delete-modal .modal-confirm')
+const cancelDeleteButton = document.querySelector('#delete-modal .modal-cancel')
 const addPostButton = document.querySelector('#add-post-button')
 const addPostModal = document.querySelector('#add-post-modal')
 const addPostCancel = document.querySelector('#add-post-cancel')
@@ -22,6 +22,8 @@ let userId = null
 let postToDelete = null
 let currentPage = 'home'
 let isLoginMode = true
+
+console.log('Threds v5 loaded')
 
 authToggle.addEventListener('click', () => {
     isLoginMode = !isLoginMode
