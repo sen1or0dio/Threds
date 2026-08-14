@@ -1,8 +1,9 @@
+import os
 from sqlalchemy import create_engine, Integer, String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import sessionmaker, declarative_base, Mapped, mapped_column
 
 
-engine = create_engine("sqlite:///./dataBase.db", echo=True)
+engine = create_engine(os.environ.get("DATABASE_URL", "sqlite:///./dataBase.db"), echo=True)
 Session = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 Base = declarative_base()
 
