@@ -103,7 +103,7 @@ login_button.addEventListener('click', async () => {
             userId = data.user_id
             homePage.style.display = 'flex'
             registrationPage.style.display = 'none'
-
+            loadAllPosts()
         }
     } catch (error) {
         alert(error.message)
