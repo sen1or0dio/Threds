@@ -23,7 +23,9 @@ let postToDelete = null
 let currentPage = 'home'
 let isLoginMode = true
 
-console.log('Threds v5 loaded')
+console.log('Threds v7 loaded')
+
+fetch('https://threds-backend-production.up.railway.app/all_user').catch(() => {})
 
 authToggle.addEventListener('click', () => {
     isLoginMode = !isLoginMode
@@ -199,6 +201,23 @@ function renderPosts(posts, showDelete = false) {
     });
 }
 
+async function fetchWithRetry(url, options, retries = 3) {
+    let lastError
+
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            return await fetch(url, options)
+        } catch (error) {
+            lastError = error
+            if (attempt < retries) {
+                await new Promise(resolve => setTimeout(resolve, 1500 * attempt))
+            }
+        }
+    }
+
+    throw lastError
+}
+
 function cancelDelete() {
     deleteModal.style.display = 'none'
     postToDelete = null
@@ -211,7 +230,7 @@ async function confirmDelete() {
     }
 
     try {
-        const response = await fetch('https://threds-backend-production.up.railway.app/delete_post', {
+        const response = await fetchWithRetry('https://threds-backend-production.up.railway.app/delete_post', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ post_id: postToDelete, user_id: userId })
