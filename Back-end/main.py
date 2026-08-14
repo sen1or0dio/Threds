@@ -90,7 +90,7 @@ def create_post(post: UserPost, db: Session = Depends(get_db)):
 
 @app.get("/all_posts")
 def get_posts(user_id: int, db: Session = Depends(get_db)):
-    all_posts = db.query(Posts, User).join(User, Posts.user_id == User.id).all()
+    all_posts = db.query(Posts, User).join(User, Posts.user_id == User.id).order_by(Posts.id.desc()).all()
     return {
         "posts" : [
             {
