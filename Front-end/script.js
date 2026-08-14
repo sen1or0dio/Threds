@@ -23,9 +23,12 @@ let postToDelete = null
 let currentPage = 'home'
 let isLoginMode = true
 
-console.log('Threds v7 loaded')
+console.log('Threds v8 loaded')
 
 fetch('https://threds-backend-production.up.railway.app/all_user').catch(() => {})
+setInterval(() => {
+    fetch('https://threds-backend-production.up.railway.app/all_user').catch(() => {})
+}, 240000)
 
 authToggle.addEventListener('click', () => {
     isLoginMode = !isLoginMode
@@ -201,7 +204,7 @@ function renderPosts(posts, showDelete = false) {
     });
 }
 
-async function fetchWithRetry(url, options, retries = 3) {
+async function fetchWithRetry(url, options, retries = 5) {
     let lastError
 
     for (let attempt = 1; attempt <= retries; attempt++) {
@@ -210,7 +213,8 @@ async function fetchWithRetry(url, options, retries = 3) {
         } catch (error) {
             lastError = error
             if (attempt < retries) {
-                await new Promise(resolve => setTimeout(resolve, 1500 * attempt))
+                const delay = [2000, 4000, 8000, 15000][attempt - 1] || 15000
+                await new Promise(resolve => setTimeout(resolve, delay))
             }
         }
     }
@@ -229,6 +233,11 @@ async function confirmDelete() {
         return
     }
 
+    const confirmButton = document.querySelector('#delete-confirm')
+    const originalText = confirmButton.textContent
+    confirmButton.disabled = true
+    confirmButton.textContent = 'Удаляю...'
+
     try {
         const response = await fetchWithRetry('https://threds-backend-production.up.railway.app/delete_post', {
             method: 'POST',
@@ -240,10 +249,14 @@ async function confirmDelete() {
 
         if (!response.ok) {
             alert('Ошибка удаления: ' + (data.detail || 'неизвестная ошибка'))
+            confirmButton.disabled = false
+            confirmButton.textContent = originalText
             return
         }
     } catch (error) {
-        alert('Ошибка сети: ' + error.message)
+        alert('Не удалось удалить пост. Проверь интернет и попробуй ещё раз.')
+        confirmButton.disabled = false
+        confirmButton.textContent = originalText
         return
     }
 
