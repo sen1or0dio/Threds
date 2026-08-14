@@ -61,6 +61,11 @@ regist_button.addEventListener('click', async () => {
         }
 
         alert(data.message || 'Успешно')
+
+        userId = data.user_id
+        homePage.style.display = 'flex'
+        registrationPage.style.display = 'none'
+        loadAllPosts()
     } catch (error) {
         alert(error.message)
     }
