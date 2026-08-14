@@ -383,21 +383,44 @@ document.querySelector('#logout-button').addEventListener('click', () => {
     all_posts.innerHTML = ''
 })
 
+function avatarGradient(name) {
+    let hash = 0
+    for (let i = 0; i < name.length; i++) {
+        hash = (hash * 31 + name.charCodeAt(i)) % 360
+    }
+    return `linear-gradient(135deg, hsl(${hash}, 75%, 55%), hsl(${(hash + 60) % 360}, 80%, 45%))`
+}
+
 function loadAllUsers() {
-    fetch('https://threds-backend-production.up.railway.app/all_user')
-    .then( response => response.json())
-    .then(data => {
+    Promise.all([
+        fetch('https://threds-backend-production.up.railway.app/all_user').then(r => r.json()),
+        fetch(`https://threds-backend-production.up.railway.app/all_posts?user_id=${userId}`).then(r => r.json())
+    ])
+    .then(([userData, postData]) => {
         all_posts.innerHTML = ''
+
+        const idByUser = {}
+        const postsByUser = {}
+
+        postData.posts.forEach(post => {
+            idByUser[post.user_name] = post.user_id
+            postsByUser[post.user_id] = (postsByUser[post.user_id] || 0) + 1
+        })
+
+        pageLabel.textContent = `All users · ${userData.users.length}`
 
         const grid = document.createElement('div')
         grid.classList.add('users-grid')
 
-        data.users.forEach(user => {
+        userData.users.forEach(user => {
+            const userIdByUser = idByUser[user]
+            const postCount = postsByUser[userIdByUser] || 0
             const card = document.createElement('div')
             card.classList.add('user-card')
             card.innerHTML = `
-                <div class="user-avatar">${user.charAt(0).toUpperCase()}</div>
+                <div class="user-avatar" style="background: ${avatarGradient(user)}">${user.charAt(0).toUpperCase()}</div>
                 <p class="user-name">${user}</p>
+                <p class="user-posts">${postCount} ${postCount === 1 ? 'пост' : 'постов'}</p>
             `
             grid.appendChild(card)
         })
