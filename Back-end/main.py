@@ -119,6 +119,10 @@ def userPost(user_post: PostResponse, db: Session = Depends(get_db)):
 def delete_post(user_post: DeletePost, db: Session = Depends(get_db)):
     post = db.query(Posts).filter(Posts.id == user_post.post_id).first()
 
+    if not post:
+        return JSONResponse({"detail": "Пост не найден"}, status_code=404)
+
+    db.query(Likes).filter(Likes.post_id == post.id).delete()
     db.delete(post)
     db.commit()
 
