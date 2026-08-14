@@ -47,7 +47,7 @@ regist_button.addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/register', {
+        const response = await fetch('https://threds-backend-x7vt.onrender.com/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_name: userName, password })
@@ -76,7 +76,7 @@ login_button.addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/login', {
+        const response = await fetch('https://threds-backend-x7vt.onrender.com/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_name: userName, password })
@@ -115,7 +115,7 @@ if (postButton) {
         }
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/new_post", {
+            const response = await fetch("https://threds-backend-x7vt.onrender.com/new_post", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ content: postContent,  user_id: userId})
@@ -161,7 +161,7 @@ function renderPosts(posts, showDelete = false) {
             const isLiked = likeButton.classList.contains('liked')
             const endpoint = isLiked ? 'unlike' : 'like'
 
-            await fetch(`http://127.0.0.1:8000/${endpoint}`, {
+            await fetch(`https://threds-backend-x7vt.onrender.com/${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user_id: userId, post_id: post.id })
@@ -193,7 +193,7 @@ cancelDeleteButton.addEventListener('click', () => {
 })
 
 confirmDeleteButton.addEventListener('click', async () => {
-    await fetch('http://127.0.0.1:8000/delete_post', {
+    await fetch('https://threds-backend-x7vt.onrender.com/delete_post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ post_id: postToDelete, user_id: userId })
@@ -225,7 +225,7 @@ addPostSubmit.addEventListener('click', async () => {
         return
     }
 
-    await fetch('http://127.0.0.1:8000/new_post', {
+    await fetch('https://threds-backend-x7vt.onrender.com/new_post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: userId, content })
@@ -237,7 +237,7 @@ addPostSubmit.addEventListener('click', async () => {
 })
 
 function loadAllPosts() {
-    fetch(`http://127.0.0.1:8000/all_posts?user_id=${userId}`)
+    fetch(`https://threds-backend-x7vt.onrender.com/all_posts?user_id=${userId}`)
     .then( response => response.json())
     .then(data => renderPosts(data.posts))
     .catch(() => {
@@ -246,7 +246,7 @@ function loadAllPosts() {
 }
 
 function loadMyPosts() {
-    fetch('http://127.0.0.1:8000/user_post', {
+    fetch('https://threds-backend-x7vt.onrender.com/user_post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: 0, content: '', user_id: userId })
@@ -286,7 +286,7 @@ document.querySelectorAll('.menu-item').forEach(item => {
 })
 
 function loadAllUsers() {
-    fetch('http://127.0.0.1:8000/all_user')
+    fetch('https://threds-backend-x7vt.onrender.com/all_user')
     .then( response => response.json())
     .then(data => {
         all_posts.innerHTML = ''

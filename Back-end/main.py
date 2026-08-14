@@ -16,6 +16,7 @@ app.add_middleware(
         "http://localhost:5500",
         "http://127.0.0.1",
         "http://localhost",
+        "https://threds-frontend.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
