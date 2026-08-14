@@ -199,17 +199,34 @@ function renderPosts(posts, showDelete = false) {
     });
 }
 
-cancelDeleteButton.addEventListener('click', () => {
+function cancelDelete() {
     deleteModal.style.display = 'none'
     postToDelete = null
-})
+}
 
-confirmDeleteButton.addEventListener('click', async () => {
-    await fetch('https://threds-backend-production.up.railway.app/delete_post', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ post_id: postToDelete, user_id: userId })
-    })
+async function confirmDelete() {
+    if (!postToDelete) {
+        cancelDelete()
+        return
+    }
+
+    try {
+        const response = await fetch('https://threds-backend-production.up.railway.app/delete_post', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ post_id: postToDelete, user_id: userId })
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+            alert('Ошибка удаления: ' + (data.detail || 'неизвестная ошибка'))
+            return
+        }
+    } catch (error) {
+        alert('Ошибка сети: ' + error.message)
+        return
+    }
 
     deleteModal.style.display = 'none'
     postToDelete = null
@@ -219,6 +236,16 @@ confirmDeleteButton.addEventListener('click', async () => {
     } else {
         loadAllPosts()
     }
+}
+
+cancelDeleteButton.addEventListener('click', cancelDelete)
+confirmDeleteButton.addEventListener('click', confirmDelete)
+
+window.addEventListener('error', (event) => {
+    const banner = document.createElement('div')
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#ff4d4d;color:#fff;z-index:99999;padding:10px;font-size:13px;text-align:center'
+    banner.textContent = 'JS ERROR: ' + event.message
+    document.body.appendChild(banner)
 })
 
 addPostButton.addEventListener('click', () => {
