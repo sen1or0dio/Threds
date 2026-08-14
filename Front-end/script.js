@@ -284,8 +284,17 @@ addPostButton.addEventListener('click', () => {
     addPostModal.style.display = 'flex'
 })
 
+function closeAddPostModal() {
+    addPostModal.classList.add('sheet-closing')
+
+    setTimeout(() => {
+        addPostModal.style.display = 'none'
+        addPostModal.classList.remove('sheet-closing')
+    }, 280)
+}
+
 addPostCancel.addEventListener('click', () => {
-    addPostModal.style.display = 'none'
+    closeAddPostModal()
     newPostInput.value = ''
 })
 
@@ -302,7 +311,7 @@ addPostSubmit.addEventListener('click', async () => {
         body: JSON.stringify({ user_id: userId, content })
     })
 
-    addPostModal.style.display = 'none'
+    closeAddPostModal()
     newPostInput.value = ''
 
     if (currentPage === 'myposts') {

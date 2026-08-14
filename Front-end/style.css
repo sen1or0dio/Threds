@@ -470,6 +470,15 @@ body{
     to{ transform: translateY(0); }
 }
 
+#add-post-modal.sheet-closing .modal{
+    animation: sheet-slide-down 0.28s ease forwards;
+}
+
+@keyframes sheet-slide-down{
+    from{ transform: translateY(0); }
+    to{ transform: translateY(100%); }
+}
+
 #add-post-modal .modal::before{
     content: '';
     width: 36px;
