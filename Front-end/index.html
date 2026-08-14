@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    
+    <div class="registration-main-block">
+        <div class="registration-content">
+            <h1 class="registration-title">Welcome to Threds</h1>
+            <input type="text" placeholder="Username" class="username-input">
+            <input type="password" placeholder="Password" class="password-input">
+            <button class="login-button">Login</button>
+            <button class="registration-button">Register</button>
+            <p class="auth-toggle" id="auth-toggle">Нет аккаунта? Зарегистрируйся!</p>
+        </div>
+    </div>
+
+    <main>
+        <section class="main-section">
+            <div class="home-content">
+                <div class="home-header">
+                    <h1>Threds</h1>
+
+                    <div class="burger-menu">
+                        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+                        <label for="menu-toggle" class="burger-icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </label>
+                        <nav class="menu">
+                            <a href="#" class="menu-item" data-page="home">Главная страница</a>
+                            <a href="#" class="menu-item" data-page="users">Все пользователи</a>
+                            <a href="#" class="menu-item" data-page="myposts">Мои посты</a>
+                        </nav>
+                    </div>
+                </div>
+                
+                <div class="posts-container">
+                    <!-- Посты будут добавляться сюда -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button class="add-post-button" id="add-post-button">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/>
+        </svg>
+    </button>
+
+    <div class="modal-overlay" id="add-post-modal">
+        <div class="modal">
+            <p class="modal-text">Новый пост</p>
+            <textarea class="new-post-input" placeholder="Что ты думаешь?"></textarea>
+            <div class="modal-buttons">
+                <button class="modal-cancel" id="add-post-cancel">Отмена</button>
+                <button class="modal-confirm" id="add-post-submit">Опубликовать</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="delete-modal">
+        <div class="modal">
+            <p class="modal-text">Точно хотите удалить пост?</p>
+            <div class="modal-buttons">
+                <button class="modal-cancel">Отмена</button>
+                <button class="modal-confirm">Удалить</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
