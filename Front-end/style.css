@@ -135,58 +135,57 @@ body{
     margin-bottom: 0;
 }
 
-.burger-menu{
-    position: absolute;
-    right: 0;
-    top: 0;
+.page-label{
+    text-align: center;
+    color: #8e8e93;
+    font-size: 13px;
+    margin-bottom: 25px;
 }
 
-.menu-toggle{
-    display: none;
+.bottom-nav{
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+    background: rgba(28, 28, 30, 0.45);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 -6px 30px rgba(0, 0, 0, 0.4);
+    z-index: 60;
 }
 
-.burger-icon{
+.nav-item{
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 8px;
-    cursor: pointer;
-}
-
-.burger-icon span{
-    width: 22px;
-    height: 2px;
-    background-color: #f7f7f7;
-    border-radius: 2px;
-}
-
-.menu{
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background-color: #161616;
-    border: 1px solid #2c2c2e;
-    border-radius: 12px;
-    padding: 8px 0;
-    display: none;
-    flex-direction: column;
-    min-width: 180px;
-    z-index: 10;
-}
-
-.menu-toggle:checked ~ .menu{
-    display: flex;
-}
-
-.menu-item{
-    padding: 10px 16px;
+    align-items: center;
+    gap: 3px;
     color: #f7f7f7;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 12px;
+    transition: background-color 0.2s;
 }
 
-.menu-item:hover{
-    background-color: #262626;
+.nav-item:hover{
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.logout-item{
+    color: #ff4d4d;
+}
+
+.logout-item:hover{
+    background-color: rgba(255, 77, 77, 0.12);
+    color: #ff6b6b;
 }
 
 .post-form{
@@ -247,7 +246,7 @@ body{
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding-bottom: 160px;
+    padding-bottom: 180px;
 }
 
 .post-wrapper{
@@ -362,7 +361,7 @@ body{
 
 .add-post-button{
     position: fixed;
-    bottom: 25px;
+    bottom: 90px;
     right: 25px;
     width: 56px;
     height: 56px;

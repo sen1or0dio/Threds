@@ -8,14 +8,15 @@ const postInput = document.querySelector('.post-input')
 const postButton = document.querySelector('.post-button')
 const all_posts = document.querySelector('.posts-container')
 const deleteModal = document.querySelector('#delete-modal')
-const confirmDeleteButton = document.querySelector('.modal-confirm')
-const cancelDeleteButton = document.querySelector('.modal-cancel')
+const confirmDeleteButton = document.querySelector('#delete-confirm')
+const cancelDeleteButton = document.querySelector('#delete-cancel')
 const addPostButton = document.querySelector('#add-post-button')
 const addPostModal = document.querySelector('#add-post-modal')
 const addPostCancel = document.querySelector('#add-post-cancel')
 const addPostSubmit = document.querySelector('#add-post-submit')
 const newPostInput = document.querySelector('.new-post-input')
 const authToggle = document.querySelector('#auth-toggle')
+const pageLabel = document.querySelector('#page-label')
 
 let userId = null
 let postToDelete = null
@@ -63,8 +64,10 @@ regist_button.addEventListener('click', async () => {
         alert(data.message || 'Успешно')
 
         userId = data.user_id
+        localStorage.setItem('threds_user_id', data.user_id)
         homePage.style.display = 'flex'
         registrationPage.style.display = 'none'
+        addPostButton.style.display = 'flex'
         loadAllPosts()
     } catch (error) {
         alert(error.message)
@@ -101,8 +104,10 @@ login_button.addEventListener('click', async () => {
 
         if(response.ok) {
             userId = data.user_id
+            localStorage.setItem('threds_user_id', data.user_id)
             homePage.style.display = 'flex'
             registrationPage.style.display = 'none'
+            addPostButton.style.display = 'flex'
             loadAllPosts()
         }
     } catch (error) {
@@ -238,7 +243,12 @@ addPostSubmit.addEventListener('click', async () => {
 
     addPostModal.style.display = 'none'
     newPostInput.value = ''
-    loadMyPosts()
+
+    if (currentPage === 'myposts') {
+        loadMyPosts()
+    } else {
+        loadAllPosts()
+    }
 })
 
 function loadAllPosts() {
@@ -251,26 +261,32 @@ function loadAllPosts() {
 }
 
 function loadMyPosts() {
-    fetch('https://threds-backend-production.up.railway.app/user_post', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: 0, content: '', user_id: userId })
-    })
+    fetch(`https://threds-backend-production.up.railway.app/all_posts?user_id=${userId}`)
     .then( response => response.json())
-    .then(data => renderPosts(data.posts.sort((a, b) => b.id - a.id), true))
+    .then(data => renderPosts(data.posts.filter(post => post.user_id === userId).sort((a, b) => b.id - a.id), true))
     .catch(() => {
         all_posts.innerHTML = '<p class="post-text">Не удалось загрузить твои посты</p>'
     })
 }
 
-document.querySelectorAll('.menu-item').forEach(item => {
-    item.addEventListener('click', () => {
-        document.querySelector('.menu-toggle').checked = false
+document.querySelectorAll('.nav-item').forEach(item => {
+    if (item.id === 'logout-button') {
+        return
+    }
 
+    item.addEventListener('click', () => {
         const page = item.dataset.page
         currentPage = page
 
-        if (page === 'myposts') {
+        if (page === 'home') {
+            pageLabel.textContent = 'Main Page'
+        } else if (page === 'myposts') {
+            pageLabel.textContent = 'My posts'
+        } else if (page === 'users') {
+            pageLabel.textContent = 'All users'
+        }
+
+        if (page === 'home' || page === 'myposts') {
             addPostButton.style.display = 'flex'
         } else {
             addPostButton.style.display = 'none'
@@ -288,6 +304,22 @@ document.querySelectorAll('.menu-item').forEach(item => {
             loadAllUsers()
         }
     })
+})
+
+document.querySelector('#logout-button').addEventListener('click', () => {
+    localStorage.removeItem('threds_user_id')
+    userId = null
+    currentPage = 'home'
+    isLoginMode = true
+    login_button.style.display = 'block'
+    regist_button.style.display = 'none'
+    authToggle.textContent = 'Нет аккаунта? Зарегистрируйся!'
+    usernameInput.value = ''
+    passwordInput.value = ''
+    addPostButton.style.display = 'none'
+    homePage.style.display = 'none'
+    registrationPage.style.display = 'flex'
+    all_posts.innerHTML = ''
 })
 
 function loadAllUsers() {
@@ -316,4 +348,12 @@ function loadAllUsers() {
     })
 }
 
-loadAllPosts()
+const savedUserId = localStorage.getItem('threds_user_id')
+
+if (savedUserId) {
+    userId = parseInt(savedUserId)
+    homePage.style.display = 'flex'
+    registrationPage.style.display = 'none'
+    addPostButton.style.display = 'flex'
+    loadAllPosts()
+}
