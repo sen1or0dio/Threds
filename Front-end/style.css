@@ -144,11 +144,11 @@ body{
 
 .bottom-nav{
     position: fixed;
-    bottom: 0;
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
-    max-width: 600px;
+    width: calc(100% - 24px);
+    max-width: 576px;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -156,7 +156,8 @@ body{
     background: rgba(28, 28, 30, 0.45);
     backdrop-filter: blur(20px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%);
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
     box-shadow: 0 -6px 30px rgba(0, 0, 0, 0.4);
     z-index: 60;
 }
