@@ -244,7 +244,7 @@ addPostSubmit.addEventListener('click', async () => {
 function loadAllPosts() {
     fetch(`https://threds-backend-production.up.railway.app/all_posts?user_id=${userId}`)
     .then( response => response.json())
-    .then(data => renderPosts(data.posts))
+    .then(data => renderPosts(data.posts.sort((a, b) => b.id - a.id)))
     .catch(() => {
         all_posts.innerHTML = '<p class="post-text">Не удалось загрузить посты</p>'
     })
@@ -257,7 +257,7 @@ function loadMyPosts() {
         body: JSON.stringify({ id: 0, content: '', user_id: userId })
     })
     .then( response => response.json())
-    .then(data => renderPosts(data.posts, true))
+    .then(data => renderPosts(data.posts.sort((a, b) => b.id - a.id), true))
     .catch(() => {
         all_posts.innerHTML = '<p class="post-text">Не удалось загрузить твои посты</p>'
     })
